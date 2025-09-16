@@ -1,0 +1,13 @@
+.waveform-wrap {
+  margin: 1rem;
+  background: #0a0c12;
+  border: 1px solid #23283a;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.waveform-empty {
+  padding: 2rem;
+  text-align: center;
+  color: #9aa0a6;
+}
+canvas { display: block; }

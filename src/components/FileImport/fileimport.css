@@ -1,0 +1,23 @@
+.file-import {
+  border: 2px dashed #666;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 1rem;
+  text-align: center;
+  background-color: #1e1e1e;
+  transition: background 0.2s ease;
+}
+
+.file-import:hover {
+  background-color: #2a2a2a;
+}
+
+.file-import input[type="file"] {
+  margin-top: 10px;
+}
+
+.file-name {
+  margin-top: 10px;
+  color: #80ffea;
+  font-size: 0.9rem;
+}

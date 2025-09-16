@@ -1,0 +1,4 @@
+.sample-controls { margin: 1rem; background:#23272f; border-radius:10px; padding:12px; }
+.sample-controls .row { display:flex; gap:12px; align-items:center; margin:8px 0; }
+.sample-controls label { width:180px; color:#cfd8e3; }
+.sample-controls input[type=range] { flex:1; }
