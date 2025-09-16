@@ -8,7 +8,7 @@ export default function FileImport({ onFileSelected }) {
     const file = e.target.files[0];
     if (file) {
       setFileName(file.name);
-      onFileSelected(file); // send file up to App
+      onFileSelected(file); 
     }
   };
 

@@ -1,16 +1,21 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { buildPeaks } from "../../utils/Peaks";
+import { buildPeaks } from "../../utils/Peaks"; 
 import "./waveformviewer.css";
 
 export default function WaveformViewer({
   buffer,
-  playhead = 0,    
-  loopStart = 0,   
-  loopEnd = 0      
+  playhead = 0,          
+  loopStart = 0,         
+  loopEnd = 0,           
+  setLoopStart,          
+  setLoopEnd,
 }) {
   const wrapRef = useRef(null);
   const canvasRef = useRef(null);
   const [wrapWidth, setWrapWidth] = useState(800);
+
+  const draggingRef = useRef(null);
+  const dragActiveRef = useRef(false);
 
   useEffect(() => {
     const el = wrapRef.current;
@@ -32,29 +37,27 @@ export default function WaveformViewer({
 
     const dpr = window.devicePixelRatio || 1;
     const W = wrapWidth;
-    const H = 140;
+    const H = 160;
 
     canvas.width = Math.floor(W * dpr);
     canvas.height = Math.floor(H * dpr);
     canvas.style.width = `${W}px`;
     canvas.style.height = `${H}px`;
 
-    const g = canvas.getContext("2d"); 
+    const g = canvas.getContext("2d");
     g.setTransform(dpr, 0, 0, dpr, 0, 0);
 
     g.fillStyle = "#0a0c12";
     g.fillRect(0, 0, W, H);
 
     g.strokeStyle = "#1f2a39";
-    g.beginPath();
-    g.moveTo(0, H / 2);
-    g.lineTo(W, H / 2);
-    g.stroke();
+    g.beginPath(); g.moveTo(0, H / 2); g.lineTo(W, H / 2); g.stroke();
 
     const { width, peaks } = peaksData;
     const scaleX = W / width;
     g.strokeStyle = "#9fb3ff";
     g.lineWidth = 1;
+
     for (let x = 0; x < width; x++) {
       const [min, max] = peaks[x];
       const y1 = ((1 - max) * 0.5) * H;
@@ -67,15 +70,17 @@ export default function WaveformViewer({
     }
 
     if (buffer && loopEnd > loopStart) {
-      const ax = (loopStart / buffer.duration) * W;
-      const bx = (loopEnd   / buffer.duration) * W;
-      const x = Math.max(0, Math.min(W, ax));
-      const w = Math.max(1, Math.min(W, bx) - x);
-      g.fillStyle = "rgba(36, 232, 165, 0.15)";
+      const a = (loopStart / buffer.duration) * W;
+      const b = (loopEnd   / buffer.duration) * W;
+      const x = Math.max(0, Math.min(W, a));
+      const w = Math.max(1, Math.min(W, b) - x);
+
+      g.fillStyle = "rgba(36, 232, 165, 0.12)";
       g.fillRect(x, 0, w, H);
+
       g.fillStyle = "#24e8a5";
-      g.fillRect(Math.floor(x), 0, 2, H);
-      g.fillRect(Math.floor(x + w), 0, 2, H);
+      g.fillRect(Math.floor(x) - 1, 0, 3, H);
+      g.fillRect(Math.floor(x + w) - 1, 0, 3, H);
     }
 
     if (playhead >= 0) {
@@ -85,8 +90,86 @@ export default function WaveformViewer({
     }
   }, [peaksData, playhead, loopStart, loopEnd, wrapWidth, buffer]);
 
+  const xToTime = (clientX) => {
+    if (!buffer || !wrapRef.current) return 0;
+    const rect = wrapRef.current.getBoundingClientRect();
+    const x = Math.max(0, Math.min(rect.width, clientX - rect.left));
+    const t = (x / rect.width) * buffer.duration;
+    return Math.max(0, Math.min(buffer.duration, t));
+  };
+
+  const whichHandleNear = (clientX) => {
+    if (!buffer || !wrapRef.current) return null;
+    const rect = wrapRef.current.getBoundingClientRect();
+    const W = rect.width;
+    const xStart = (loopStart / buffer.duration) * W;
+    const xEnd   = (loopEnd   / buffer.duration) * W;
+    const x = clientX - rect.left;
+    const distStart = Math.abs(x - xStart);
+    const distEnd   = Math.abs(x - xEnd);
+    const grab = 10; // px
+    if (distStart <= grab && distStart <= distEnd) return "start";
+    if (distEnd <= grab && distEnd < distStart) return "end";
+    return null;
+  };
+
+  const onMouseDown = (e) => {
+    if (!buffer) return;
+    const near = whichHandleNear(e.clientX);
+    if (near) {
+      draggingRef.current = near;
+      dragActiveRef.current = true;
+      e.preventDefault();
+      return;
+    }
+    const t = xToTime(e.clientX);
+    const dToStart = Math.abs(t - loopStart);
+    const dToEnd = Math.abs(t - loopEnd);
+    const target = dToStart <= dToEnd ? "start" : "end";
+    draggingRef.current = target;
+    dragActiveRef.current = true;
+    if (target === "start") {
+      setLoopStart?.(Math.min(t, loopEnd - 0.01));
+    } else {
+      setLoopEnd?.(Math.max(t, loopStart + 0.01));
+    }
+  };
+
+  const onMouseMove = (e) => {
+    if (!dragActiveRef.current || !buffer) return;
+    const t = xToTime(e.clientX);
+    const which = draggingRef.current;
+    if (which === "start") {
+      setLoopStart?.(Math.min(t, loopEnd - 0.01));
+    } else if (which === "end") {
+      setLoopEnd?.(Math.max(t, loopStart + 0.01));
+    }
+  };
+
+  const endDrag = () => {
+    dragActiveRef.current = false;
+    draggingRef.current = null;
+  };
+
+  useEffect(() => {
+    const up = () => endDrag();
+    const leave = () => endDrag();
+    window.addEventListener("mouseup", up);
+    window.addEventListener("mouseleave", leave);
+    return () => {
+      window.removeEventListener("mouseup", up);
+      window.removeEventListener("mouseleave", leave);
+    };
+  }, []);
+
   return (
-    <div className="waveform-wrap" ref={wrapRef}>
+    <div
+      className={"waveform-wrap" + (dragActiveRef.current ? " dragging" : "")}
+      ref={wrapRef}
+      onMouseDown={onMouseDown}
+      onMouseMove={onMouseMove}
+      onMouseUp={endDrag}
+    >
       {!buffer ? (
         <div className="waveform-empty">Load a file to see its waveform.</div>
       ) : (

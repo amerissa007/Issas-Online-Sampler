@@ -1,23 +1,4 @@
-.transport {
-  margin: 1rem;
-  display: flex;
-  gap: 1rem;
-}
-
-.transport button {
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-}
-
-.transport button:first-child {
-  background: #2e7d32;
-  color: white;
-}
-
-.transport button:last-child {
-  background: #c62828;
-  color: white;
-}
+.transport { margin: 1rem; display:flex; gap:1rem; }
+.transport button { padding: .5rem 1rem; border:0; border-radius:6px; cursor:pointer; }
+.transport button:first-child { background:#2e7d32; color:#fff; }
+.transport button:last-child  { background:#c62828; color:#fff; }

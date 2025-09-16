@@ -1,0 +1,25 @@
+.export-controls {
+  margin: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.export-controls button {
+  padding: 0.6rem 1rem;
+  border: 0;
+  border-radius: 8px;
+  background: #4f7cff;
+  color: #fff;
+  cursor: pointer;
+}
+
+.export-controls button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.export-controls .hint {
+  color: #99a3b7;
+  font-size: 0.9rem;
+}

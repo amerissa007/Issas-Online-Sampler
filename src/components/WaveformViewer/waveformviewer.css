@@ -1,13 +1,13 @@
+/* src/components/WaveformViewer/waveformviewer.css */
 .waveform-wrap {
   margin: 1rem;
   background: #0a0c12;
   border: 1px solid #23283a;
   border-radius: 10px;
   overflow: hidden;
+  cursor: crosshair;
+  user-select: none;
 }
-.waveform-empty {
-  padding: 2rem;
-  text-align: center;
-  color: #9aa0a6;
-}
+.waveform-wrap.dragging { cursor: ew-resize; }
+.waveform-empty { padding: 2rem; text-align: center; color: #9aa0a6; }
 canvas { display: block; }

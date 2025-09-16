@@ -1,0 +1,24 @@
+.effects-controls {
+  margin: 1rem;
+  background: #23272f;
+  border-radius: 12px;
+  padding: 12px;
+}
+.effects-controls h3 {
+  margin: 0 0 8px 0;
+}
+.effects-controls .row {
+  display: flex; align-items: center; gap: 12px; margin: 10px 0;
+}
+.effects-controls label {
+  width: 120px; color: #cfd8e3;
+}
+.effects-controls input[type=range] {
+  flex: 1;
+}
+.effects-controls .value {
+  width: 80px; text-align: right; color: #9ec9ff;
+}
+.effects-controls hr {
+  border: 0; border-top: 1px solid #2f3543; margin: 12px 0;
+}

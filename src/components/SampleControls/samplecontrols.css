@@ -1,4 +1,6 @@
 .sample-controls { margin: 1rem; background:#23272f; border-radius:10px; padding:12px; }
-.sample-controls .row { display:flex; gap:12px; align-items:center; margin:8px 0; }
-.sample-controls label { width:180px; color:#cfd8e3; }
+.sample-controls .row { display:flex; align-items:center; gap:12px; margin:10px 0; }
+.sample-controls label { width:120px; color:#cfd8e3; }
 .sample-controls input[type=range] { flex:1; }
+.sample-controls .value { width:70px; text-align:right; color:#9ec9ff; }
+.sample-controls hr { border:0; border-top:1px solid #2f3543; margin:12px 0; }
