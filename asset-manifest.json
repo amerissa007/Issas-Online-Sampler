@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/Issas-Online-Sampler/static/css/main.20b2ee8e.css",
-    "main.js": "/Issas-Online-Sampler/static/js/main.37731d6a.js",
+    "main.css": "/Issas-Online-Sampler/static/css/main.95293667.css",
+    "main.js": "/Issas-Online-Sampler/static/js/main.c6da6958.js",
     "static/js/453.5b0b0e05.chunk.js": "/Issas-Online-Sampler/static/js/453.5b0b0e05.chunk.js",
     "index.html": "/Issas-Online-Sampler/index.html",
-    "main.20b2ee8e.css.map": "/Issas-Online-Sampler/static/css/main.20b2ee8e.css.map",
-    "main.37731d6a.js.map": "/Issas-Online-Sampler/static/js/main.37731d6a.js.map",
+    "main.95293667.css.map": "/Issas-Online-Sampler/static/css/main.95293667.css.map",
+    "main.c6da6958.js.map": "/Issas-Online-Sampler/static/js/main.c6da6958.js.map",
     "453.5b0b0e05.chunk.js.map": "/Issas-Online-Sampler/static/js/453.5b0b0e05.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.20b2ee8e.css",
-    "static/js/main.37731d6a.js"
+    "static/css/main.95293667.css",
+    "static/js/main.c6da6958.js"
   ]
 }
