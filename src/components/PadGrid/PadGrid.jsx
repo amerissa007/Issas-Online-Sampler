@@ -1,12 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import "./padgrid.css";
 
-/**
- * PadGrid: user-defined slices playable by mouse/touch/keyboard.
- * - Hold to play, release to stop (short envelope).
- * - Polyphonic.
- * - No recording hooks.
- */
 export default function PadGrid({
   audioCtx,
   buffer,
@@ -15,7 +9,7 @@ export default function PadGrid({
   loopStart,
   loopEnd,
   rate = 1,
-  gainNode,             // your inputGain node (FX chain)
+  gainNode,             
   slicePoints = [],
   setLoopStart,
   setLoopEnd,
@@ -34,7 +28,6 @@ export default function PadGrid({
     "z","x","c","v","b","n","m",",",".","/"
   ]).current;
 
-  // Build segments from all slices (optionally limited to loop)
   const segments = useMemo(() => {
     if (!buffer) return [];
     const pts = slicePoints.slice().sort((a,b)=>a-b).filter(t => t >= 0 && t < buffer.duration);
@@ -72,7 +65,7 @@ export default function PadGrid({
     const useBuf = reverse ? reversedBuffer : buffer;
     if (!out || !useBuf) return;
 
-    stopPad(idx); // retrigger same pad
+    stopPad(idx);
 
     const seg = segments[idx];
     const startOffset = reverse ? (useBuf.duration - seg.end) : seg.start;
@@ -88,7 +81,7 @@ export default function PadGrid({
 
     src.connect(g).connect(out);
     try { audioCtx.resume(); } catch {}
-    src.start(now, startOffset); // play until stop
+    src.start(now, startOffset);
 
     activeRef.current[idx] = { src, gain: g };
     setHeldPads(prev => new Set(prev).add(idx));
@@ -126,7 +119,6 @@ export default function PadGrid({
     downKeysRef.current.clear();
   };
 
-  // mouse/touch
   const md = (e,i)=>{ e.preventDefault(); startPad(i); };
   const mu = (e,i)=>{ e.preventDefault(); stopPad(i); };
   const ml = (e,i)=>{ e.preventDefault(); stopPad(i); };
@@ -134,7 +126,6 @@ export default function PadGrid({
   const te = (e,i)=>{ e.preventDefault(); stopPad(i); };
   const tc = (e,i)=>{ e.preventDefault(); stopPad(i); };
 
-  // keyboard
   useEffect(() => {
     const onKeyDown = (e) => {
       const tag = (e.target && e.target.tagName || "").toLowerCase();

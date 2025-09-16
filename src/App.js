@@ -156,7 +156,6 @@ export default function App() {
     setLoopEnd(audioBuffer.duration);
     setPlayhead(0);
 
-    // default: 8 even slices across whole file
     const N = 8;
     const arr = [];
     for (let i = 0; i < N; i++) {
@@ -172,117 +171,116 @@ export default function App() {
     <div className="app">
       <h1>Issa's Online Sampler</h1>
       <div className="app-container">
-        <FileImport onFileSelected={handleFileSelected} />
+        <div className="left-panel">
+          <FileImport onFileSelected={handleFileSelected} />
+          <WaveformViewer
+            buffer={buffer}
+            playhead={playhead}
+            loopStart={loopStart}
+            loopEnd={loopEnd}
+            setLoopStart={setLoopStart}
+            setLoopEnd={setLoopEnd}
+            slicePoints={slicePoints}
+            onAddSlice={addSliceAt}
+            onRemoveSlice={removeSliceNear}
+          />
+          <SampleControls
+            buffer={buffer}
+            volume={volume} setVolume={setVolume}
+            pan={pan}       setPan={setPan}
+            semitones={semitones} setSemitones={setSemitones}
+            rate={rate}
+            loopStart={loopStart} setLoopStart={setLoopStart}
+            loopEnd={loopEnd}     setLoopEnd={setLoopEnd}
+            gate={gate}           setGate={setGate}
+            reverse={reverse}     setReverse={setReverse}
+            bpm={bpm} setBpm={setBpm}
+          />
 
-        <WaveformViewer
-          buffer={buffer}
-          playhead={playhead}
-          loopStart={loopStart}
-          loopEnd={loopEnd}
-          setLoopStart={setLoopStart}
-          setLoopEnd={setLoopEnd}
-          slicePoints={slicePoints}
-          onAddSlice={addSliceAt}
-          onRemoveSlice={removeSliceNear}
-        />
+          <EffectsControls
+            filterCutoff={filterCutoff}   setFilterCutoff={setFilterCutoff}
+            filterQ={filterQ}             setFilterQ={setFilterQ}
+            delayTime={delayTime}         setDelayTime={setDelayTime}
+            delayFeedback={delayFeedback} setDelayFeedback={setDelayFeedback}
+            delayMix={delayMix}           setDelayMix={setDelayMix}
+          />
 
+          <TransportControls
+            audioCtx={ctx}
+            buffer={buffer}
+            reversedBuffer={reversedBuffer}
+            reverse={reverse}
+            loopStart={loopStart}
+            loopEnd={loopEnd}
+            gainNode={inputGainRef.current}
+            panNode={panRef.current}
+            rate={rate}
+            onPlayhead={setPlayhead}
+          />
+        </div>
+        <div className="right-panel">
+          <StepSequencer
+            audioCtx={ctx}
+            buffer={buffer}
+            reversedBuffer={reversedBuffer}
+            reverse={reverse}
+            loopStart={loopStart}
+            loopEnd={loopEnd}
+            gainNode={inputGainRef.current}
+            rate={rate}
+            bpm={bpm}
+            setBpm={setBpm}
+            steps={steps}
+            setSteps={setSteps}
+            gate={gate}
 
-
-        <SampleControls
-          buffer={buffer}
-          volume={volume} setVolume={setVolume}
-          pan={pan}       setPan={setPan}
-          semitones={semitones} setSemitones={setSemitones}
-          rate={rate}
-          loopStart={loopStart} setLoopStart={setLoopStart}
-          loopEnd={loopEnd}     setLoopEnd={setLoopEnd}
-          gate={gate}           setGate={setGate}
-          reverse={reverse}     setReverse={setReverse}
-          bpm={bpm} setBpm={setBpm}
-        />
-
-        <EffectsControls
-          filterCutoff={filterCutoff}   setFilterCutoff={setFilterCutoff}
-          filterQ={filterQ}             setFilterQ={setFilterQ}
-          delayTime={delayTime}         setDelayTime={setDelayTime}
-          delayFeedback={delayFeedback} setDelayFeedback={setDelayFeedback}
-          delayMix={delayMix}           setDelayMix={setDelayMix}
-        />
-
-        <TransportControls
-          audioCtx={ctx}
-          buffer={buffer}
-          reversedBuffer={reversedBuffer}
-          reverse={reverse}
-          loopStart={loopStart}
-          loopEnd={loopEnd}
-          gainNode={inputGainRef.current}
-          panNode={panRef.current}
-          rate={rate}
-          onPlayhead={setPlayhead}
-        />
-
-        <StepSequencer
-          audioCtx={ctx}
-          buffer={buffer}
-          reversedBuffer={reversedBuffer}
-          reverse={reverse}
-          loopStart={loopStart}
-          loopEnd={loopEnd}
-          gainNode={inputGainRef.current}
-          rate={rate}
-          bpm={bpm}
-          setBpm={setBpm}
-          steps={steps}
-          setSteps={setSteps}
-          gate={gate}
-
-          slicePoints={slicePoints}
-          stepSlices={stepSlices}
-          setStepSlices={setStepSlices}
-        />
+            slicePoints={slicePoints}
+            stepSlices={stepSlices}
+            setStepSlices={setStepSlices}
+          />
 
 
-        <ExportControls
-          audioCtx={ctx}
-          buffer={buffer}
-          reversedBuffer={reversedBuffer}
-          reverse={reverse}
-          loopStart={loopStart}
-          loopEnd={loopEnd}
-          rate={rate}
-          volume={volume}
-          pan={pan}
-          bpm={bpm}
-          steps={steps}
-          gate={gate}
-          filterCutoff={filterCutoff}
-          filterQ={filterQ}
-          delayTime={delayTime}
-          delayFeedback={delayFeedback}
-          delayMix={delayMix}
-        />
-        <SliceControls
-          buffer={buffer}
-          slicePoints={slicePoints}
-          setSlicePoints={setSlicePoints}
-          loopStart={loopStart}
-          loopEnd={loopEnd}
-        />
-        <PadGrid
-          audioCtx={ctx}
-          buffer={buffer}
-          reversedBuffer={reversedBuffer}
-          reverse={reverse}
-          loopStart={loopStart}
-          loopEnd={loopEnd}
-          rate={rate}
-          gainNode={inputGainRef.current}
-          slicePoints={slicePoints}
-          setLoopStart={setLoopStart}
-          setLoopEnd={setLoopEnd}     
-        />
-
+          <SliceControls
+            buffer={buffer}
+            slicePoints={slicePoints}
+            setSlicePoints={setSlicePoints}
+            loopStart={loopStart}
+            loopEnd={loopEnd}
+          />
+          <PadGrid
+            audioCtx={ctx}
+            buffer={buffer}
+            reversedBuffer={reversedBuffer}
+            reverse={reverse}
+            loopStart={loopStart}
+            loopEnd={loopEnd}
+            rate={rate}
+            gainNode={inputGainRef.current}
+            slicePoints={slicePoints}
+            setLoopStart={setLoopStart}
+            setLoopEnd={setLoopEnd}     
+          />
+          
+          <ExportControls
+            audioCtx={ctx}
+            buffer={buffer}
+            reversedBuffer={reversedBuffer}
+            reverse={reverse}
+            loopStart={loopStart}
+            loopEnd={loopEnd}
+            rate={rate}
+            volume={volume}
+            pan={pan}
+            bpm={bpm}
+            steps={steps}
+            gate={gate}
+            filterCutoff={filterCutoff}
+            filterQ={filterQ}
+            delayTime={delayTime}
+            delayFeedback={delayFeedback}
+            delayMix={delayMix}
+          />
+        </div>
       </div>
     </div>
   );

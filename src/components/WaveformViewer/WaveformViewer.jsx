@@ -10,7 +10,6 @@ export default function WaveformViewer({
   loopEnd = 0,
   setLoopStart,
   setLoopEnd,
-  // NEW:
   slicePoints = [],
   onAddSlice,
   onRemoveSlice,
@@ -52,15 +51,12 @@ export default function WaveformViewer({
     const g = canvas.getContext("2d");
     g.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    // bg
     g.fillStyle = "#0a0c12";
     g.fillRect(0, 0, W, H);
 
-    // midline
     g.strokeStyle = "#1f2a39";
     g.beginPath(); g.moveTo(0, H/2); g.lineTo(W, H/2); g.stroke();
 
-    // waveform
     const { width, peaks } = peaksData;
     const scaleX = W / width;
     g.strokeStyle = "#9fb3ff";
@@ -73,7 +69,6 @@ export default function WaveformViewer({
       g.beginPath(); g.moveTo(cx, y1); g.lineTo(cx, y2); g.stroke();
     }
 
-    // selection
     if (buffer && loopEnd > loopStart) {
       const a = (loopStart / buffer.duration) * W;
       const b = (loopEnd   / buffer.duration) * W;
@@ -86,14 +81,12 @@ export default function WaveformViewer({
       g.fillRect(Math.floor(x+w)-1, 0, 3, H);
     }
 
-    // slice markers
     if (buffer && slicePoints?.length) {
       g.fillStyle = "#ffb86c";
       g.strokeStyle = "#ffb86c";
       slicePoints.forEach((t, idx) => {
         const x = Math.max(0, Math.min(W-1, Math.floor((t / buffer.duration) * W)));
         g.fillRect(x, 0, 2, H);
-        // tiny tag
         g.fillStyle = "#0a0c12";
         g.fillRect(x+3, 6, 18, 12);
         g.strokeStyle = "#ffb86c";
@@ -105,7 +98,6 @@ export default function WaveformViewer({
       });
     }
 
-    // playhead
     if (playhead >= 0) {
       const px = Math.max(0, Math.min(W - 1, Math.floor(playhead * W)));
       g.fillStyle = "#24e8a5";
@@ -138,16 +130,12 @@ export default function WaveformViewer({
 
   const onMouseDown = (e) => {
     if (!buffer) return;
-
-    // Modifiers:
-    // Alt/Option = add slice at click
     if (e.altKey) {
       const t = xToTime(e.clientX);
       onAddSlice?.(t);
       e.preventDefault();
       return;
     }
-    // Ctrl/Cmd = remove nearest slice (within ~8px)
     if (e.ctrlKey || e.metaKey) {
       const t = xToTime(e.clientX);
       const rect = wrapRef.current.getBoundingClientRect();
@@ -156,7 +144,6 @@ export default function WaveformViewer({
       return;
     }
 
-    // Otherwise: loop handle drag as before
     const near = whichHandleNear(e.clientX);
     if (near) {
       draggingRef.current = near;

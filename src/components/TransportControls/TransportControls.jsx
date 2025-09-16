@@ -1,4 +1,3 @@
-// src/components/TransportControls/TransportControls.jsx
 import { useEffect, useRef } from "react";
 import "./transportcontrols.css";
 
@@ -38,7 +37,6 @@ export default function TransportControls({
     src.loopEnd = endOffset;
     src.playbackRate.value = rate;
 
-    // connect to first node of your chain (inputGain)
     src.connect(gainNode);
     src.start(0, startOffset);
 
@@ -79,15 +77,13 @@ export default function TransportControls({
     }
   };
 
-  // live rate updates
   useEffect(() => {
     if (audioCtx && sourceRef.current) {
       sourceRef.current.playbackRate.setValueAtTime(rate, audioCtx.currentTime);
     }
   }, [rate, audioCtx]);
 
-  // cleanup on unmount
-  useEffect(() => () => stop(), []); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => () => stop(), []); 
 
   return (
     <div className="transport">

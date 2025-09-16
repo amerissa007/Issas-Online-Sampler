@@ -34,7 +34,6 @@ export default function StepSequencer({
   useEffect(() => { bpmRef.current = bpm; }, [bpm]);
   useEffect(() => { stepSlicesRef.current = stepSlices; }, [stepSlices]);
 
-  // Build slice segments from the entire file (independent of loop)
   const segments = useMemo(() => {
     if (!buffer) return [];
     const pts = slicePoints.slice().sort((a,b)=>a-b).filter(t => t >= 0 && t < buffer.duration);
