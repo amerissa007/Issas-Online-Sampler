@@ -14,3 +14,12 @@
 .cell.active { outline: 2px solid #24e8a5; }
 
 .seq-hint { color:#99a3b7; margin:8px 2px 2px; font-size:.9rem; }
+
+.cell.has-slice { outline: 2px solid #ffb86c; }
+.cell .cell-top { font-size: 0.8rem; opacity: .9; }
+.cell .cell-bottom { font-size: 0.7rem; opacity: .7; }
+
+.rec-toggle { display:flex; align-items:center; gap:6px; margin: 0 12px; }
+.rec-dot { width:10px; height:10px; border-radius:50%; background:#555; display:inline-block; }
+.rec-dot.on { background:#e33; box-shadow: 0 0 8px #e33; }
+

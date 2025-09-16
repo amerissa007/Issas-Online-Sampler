@@ -10,8 +10,11 @@ import EffectsControls from "./components/EffectsControls/EffectsControls";
 import TransportControls from "./components/TransportControls/TransportControls";
 import StepSequencer from "./components/StepSequencer/StepSequencer";
 import ExportControls from "./components/ExportControls/ExportControls";
+import PadGrid from "./components/PadGrid/PadGrid";
+import SliceControls from "./components/SliceControls/SliceControls";
 
 export default function App() {
+  const padRef = useRef(null);
   const { ensureAudioContext } = useAudioContext();
   const [ctx, setCtx] = useState(null);
 
@@ -31,13 +34,19 @@ export default function App() {
   const [gate, setGate] = useState(0.20);
   const [steps, setSteps] = useState(Array(16).fill(false));
 
+  const [slicePoints, setSlicePoints] = useState([]);
+  const [stepSlices, setStepSlices] = useState(Array(16).fill(null));
+
+
   const [filterCutoff, setFilterCutoff] = useState(12000); 
   const [filterQ, setFilterQ] = useState(0.7);
   const [delayTime, setDelayTime] = useState(0.25);        
   const [delayFeedback, setDelayFeedback] = useState(0.25);
-  const [delayMix, setDelayMix] = useState(0.25);          
+  const [delayMix, setDelayMix] = useState(0.25);     
+  
+  const [slices, setSlices] = useState(8);
 
-  const inputGainRef = useRef(null);  
+  const inputGainRef = useRef(null);
   const filterRef    = useRef(null);
   const delayRef     = useRef(null);
   const fbRef        = useRef(null);  
@@ -103,7 +112,28 @@ export default function App() {
       dryRef.current.gain.value = 1 - wet;
     }
   }, [delayMix]);
-
+    const addSliceAt = (timeSec) => {
+  if (!buffer) return;
+  const t = Math.max(0, Math.min(buffer.duration, timeSec));
+  const exists = slicePoints.some(s => Math.abs(s - t) < 0.005);
+  if (exists) return;
+  const next = [...slicePoints, t].sort((a, b) => a - b);
+  setSlicePoints(next);
+};
+  const removeSliceNear = (timeSec, threshPx = 8, wrapWidthPx = 800) => {
+    if (!buffer || slicePoints.length === 0) return;
+    const frac = timeSec / buffer.duration;
+    const threshSec = (threshPx / wrapWidthPx) * buffer.duration;
+    let bestIdx = -1, bestDist = Infinity;
+    slicePoints.forEach((s, i) => {
+      const d = Math.abs(s - timeSec);
+      if (d < bestDist) { bestDist = d; bestIdx = i; }
+    });
+    if (bestDist <= threshSec && bestIdx >= 0) {
+      const next = slicePoints.slice(); next.splice(bestIdx, 1);
+      setSlicePoints(next);
+    }
+  };
   const makeReversedBuffer = (ac, buf) => {
     const rev = ac.createBuffer(buf.numberOfChannels, buf.length, buf.sampleRate);
     for (let ch = 0; ch < buf.numberOfChannels; ch++) {
@@ -115,25 +145,32 @@ export default function App() {
   };
 
   const handleFileSelected = async (file) => {
-    if (!file) return;
-    try {
-      const ac = ensureAudioContext();
-      setCtx(ac);
-      const audioBuffer = await decodeAudioFile(file, ac);
-      setBuffer(audioBuffer);
-      setReversedBuffer(makeReversedBuffer(ac, audioBuffer));
-      setLoopStart(0);
-      setLoopEnd(audioBuffer.duration);
-      setPlayhead(0);
-    } catch (err) {
-      console.error(err);
-      alert("Could not decode this audio file.");
-    }
-  };
+  if (!file) return;
+  try {
+    const ac = ensureAudioContext();
+    setCtx(ac);
+    const audioBuffer = await decodeAudioFile(file, ac);
+    setBuffer(audioBuffer);
+    setReversedBuffer(makeReversedBuffer(ac, audioBuffer));
+    setLoopStart(0);
+    setLoopEnd(audioBuffer.duration);
+    setPlayhead(0);
 
+    // default: 8 even slices across whole file
+    const N = 8;
+    const arr = [];
+    for (let i = 0; i < N; i++) {
+      arr.push((i / N) * audioBuffer.duration);
+    }
+    setSlicePoints(arr);
+  } catch (err) {
+    console.error(err);
+    alert("Could not decode this audio file.");
+  }
+};
   return (
     <div className="app">
-      <h1>Online Sampler</h1>
+      <h1>Issa's Online Sampler</h1>
       <div className="app-container">
         <FileImport onFileSelected={handleFileSelected} />
 
@@ -144,7 +181,12 @@ export default function App() {
           loopEnd={loopEnd}
           setLoopStart={setLoopStart}
           setLoopEnd={setLoopEnd}
+          slicePoints={slicePoints}
+          onAddSlice={addSliceAt}
+          onRemoveSlice={removeSliceNear}
         />
+
+
 
         <SampleControls
           buffer={buffer}
@@ -194,7 +236,12 @@ export default function App() {
           steps={steps}
           setSteps={setSteps}
           gate={gate}
+
+          slicePoints={slicePoints}
+          stepSlices={stepSlices}
+          setStepSlices={setStepSlices}
         />
+
 
         <ExportControls
           audioCtx={ctx}
@@ -214,6 +261,26 @@ export default function App() {
           delayTime={delayTime}
           delayFeedback={delayFeedback}
           delayMix={delayMix}
+        />
+        <SliceControls
+          buffer={buffer}
+          slicePoints={slicePoints}
+          setSlicePoints={setSlicePoints}
+          loopStart={loopStart}
+          loopEnd={loopEnd}
+        />
+        <PadGrid
+          audioCtx={ctx}
+          buffer={buffer}
+          reversedBuffer={reversedBuffer}
+          reverse={reverse}
+          loopStart={loopStart}
+          loopEnd={loopEnd}
+          rate={rate}
+          gainNode={inputGainRef.current}
+          slicePoints={slicePoints}
+          setLoopStart={setLoopStart}
+          setLoopEnd={setLoopEnd}     
         />
 
       </div>

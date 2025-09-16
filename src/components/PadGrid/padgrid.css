@@ -1,0 +1,23 @@
+.padgrid { margin: 1rem; background:#23272f; border-radius:12px; padding:12px; }
+.padgrid-header { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px; }
+.padgrid-header h3 { margin:0; }
+.padgrid .controls { display:flex; align-items:center; gap:10px; }
+.padgrid .controls select { padding:4px 8px; border-radius:6px; border:1px solid #2f3543; background:#0f1220; color:#e9eefc; }
+.padgrid .controls .toggle { display:flex; align-items:center; gap:6px; color:#cfd8e3; }
+.pads { display:grid; gap:10px; }
+.pad {
+  aspect-ratio: 1/1;
+  border:0; border-radius:10px;
+  background:#3953ff; color:#fff; font-weight:700; font-size:0.95rem;
+  box-shadow: 0 2px 0 rgba(0,0,0,.4);
+  cursor:pointer; transition: transform .04s ease;
+}
+.pad:active { transform: translateY(2px); box-shadow: 0 0 0 rgba(0,0,0,0); }
+.padgrid-empty { color:#9aa3b7; padding:8px 0; }
+.pad.held {
+  transform: translateY(2px);
+  box-shadow: 0 0 0 rgba(0,0,0,0);
+  filter: brightness(1.15);
+}
+.pad .pad-line1 { font-weight: 800; }
+.pad .pad-line2 { font-size: 0.7rem; opacity: 0.85; margin-top: 2px; }

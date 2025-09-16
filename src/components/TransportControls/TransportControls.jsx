@@ -1,11 +1,12 @@
+// src/components/TransportControls/TransportControls.jsx
 import { useEffect, useRef } from "react";
 import "./transportcontrols.css";
 
 export default function TransportControls({
   audioCtx,
   buffer,
-  reversedBuffer,  
-  reverse,         
+  reversedBuffer,
+  reverse,
   loopStart,
   loopEnd,
   gainNode,
@@ -15,7 +16,6 @@ export default function TransportControls({
 }) {
   const sourceRef = useRef(null);
   const rafRef = useRef(0);
-
   const posRef = useRef(0);
   const lastTimeRef = useRef(0);
 
@@ -28,12 +28,8 @@ export default function TransportControls({
     const useBuf = reverse ? reversedBuffer : buffer;
     if (!useBuf) return;
 
-    const startOffset = reverse
-      ? (useBuf.duration - loopEnd)    
-      : loopStart;
-    const endOffset = reverse
-      ? (useBuf.duration - loopStart)
-      : loopEnd;
+    const startOffset = reverse ? (useBuf.duration - loopEnd) : loopStart;
+    const endOffset   = reverse ? (useBuf.duration - loopStart) : loopEnd;
 
     const src = audioCtx.createBufferSource();
     src.buffer = useBuf;
@@ -42,6 +38,7 @@ export default function TransportControls({
     src.loopEnd = endOffset;
     src.playbackRate.value = rate;
 
+    // connect to first node of your chain (inputGain)
     src.connect(gainNode);
     src.start(0, startOffset);
 
@@ -54,17 +51,15 @@ export default function TransportControls({
       const now = audioCtx.currentTime;
       const dt = now - lastTimeRef.current;
       lastTimeRef.current = now;
-      const r = sourceRef.current.playbackRate.value || rate;
 
+      const r = sourceRef.current.playbackRate.value || rate;
       posRef.current = (posRef.current + dt * r) % loopLen;
 
       const absolute = reverse
-        ? (loopEnd - posRef.current)     
-        : (loopStart + posRef.current);  
+        ? (loopEnd - posRef.current)
+        : (loopStart + posRef.current);
 
-      const frac = absolute / buffer.duration;
-      onPlayhead(frac);
-
+      onPlayhead(absolute / buffer.duration);
       rafRef.current = requestAnimationFrame(tick);
     };
     tick();
@@ -73,21 +68,26 @@ export default function TransportControls({
   const stop = () => {
     if (sourceRef.current) {
       try { sourceRef.current.stop(); } catch {}
-      sourceRef.current.disconnect();
+      try { sourceRef.current.disconnect(); } catch {}
       sourceRef.current = null;
     }
     cancelAnimationFrame(rafRef.current);
-    if (buffer) {
+
+    if (buffer && loopLen > 0) {
       const frac = (reverse ? loopEnd : loopStart) / buffer.duration;
       onPlayhead(frac);
     }
   };
 
+  // live rate updates
   useEffect(() => {
     if (audioCtx && sourceRef.current) {
       sourceRef.current.playbackRate.setValueAtTime(rate, audioCtx.currentTime);
     }
   }, [rate, audioCtx]);
+
+  // cleanup on unmount
+  useEffect(() => () => stop(), []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="transport">
