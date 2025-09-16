@@ -1,4 +1,10 @@
-.padgrid { margin: 1rem; background:#23272f; border-radius:12px; padding:12px; }
+.padgrid { 
+  margin: 1rem;     
+  background: linear-gradient(to bottom, #535353 0%, #333333 100%);
+  border-radius:12px; 
+  padding:12px;    
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+ }
 .padgrid-header { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px; }
 .padgrid-header h3 { margin:0; }
 .padgrid .controls { display:flex; align-items:center; gap:10px; }

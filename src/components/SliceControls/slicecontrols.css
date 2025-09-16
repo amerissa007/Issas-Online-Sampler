@@ -1,4 +1,6 @@
-.slice-controls { margin: 1rem; background:#23272f; border-radius:12px; padding:12px; }
+.slice-controls { margin: 1rem;     background: linear-gradient(to bottom, #535353 0%, #333333 100%);
+; border-radius:12px; padding:12px; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+ }
 .slice-controls h3 { margin:0 0 8px 0; }
 .slice-controls .row { display:flex; align-items:center; flex-wrap:wrap; gap:8px; margin:8px 0; }
 .slice-controls .row.small { margin-top:4px; }

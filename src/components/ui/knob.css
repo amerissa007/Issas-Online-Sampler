@@ -1,0 +1,48 @@
+.knob-wrap {
+  user-select: none;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: grab;
+}
+.knob-wrap.dragging { cursor: grabbing; }
+
+.k-arc-bg {
+  fill: none;
+  stroke: #3a455a;
+  stroke-width: 10;
+  stroke-linecap: round;
+}
+.k-arc-val {
+  fill: none;
+  stroke: white;
+  stroke-width: 10;
+  stroke-linecap: round;
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.25));
+}
+.k-disc {
+  fill: #1a2230;
+  stroke: #2b3547;
+  stroke-width: 2;
+}
+.k-thumb {
+  fill: #1b2230;
+  stroke: #1b2230;
+  stroke-width: 2;
+}
+
+.k-meta {
+  text-align: center;
+  line-height: 1.1;
+}
+.k-label {
+  font-size: .86rem;
+  color: white;
+}
+.k-value {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: .8rem;
+  color: grey;
+  min-height: 1em;
+}

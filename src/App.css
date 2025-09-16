@@ -1,5 +1,5 @@
 .app {
-  background-color: #1f1f1f;
+  background-color: #2D2D2D;
   min-height: 100vh;           
   display: flex;
   flex-direction: column;
@@ -10,10 +10,10 @@
 }
 
 .app-container {
-  background-color: #2e2e2e;
+  background-color: #2D2D2D;
   display: flex;
+  justify-content: center;
   border-radius: 12px;
   padding: 2rem;
-  width: 90%;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  /* box-shadow: 0 4px 12px rgba(0,0,0,0.5); */
 }

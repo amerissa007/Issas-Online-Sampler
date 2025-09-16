@@ -1,88 +1,128 @@
+import { useMemo } from "react";
+import Knob from "../ui/Knob";
 import "./samplecontrols.css";
 
 export default function SampleControls({
   buffer,
-  volume, setVolume,
-  pan, setPan,
-  semitones, setSemitones,
-  rate,
+  // knobs
+  volume, onVolume,
+  pan, onPan,
+  pitchSt, onPitchSt,
+  rate, onRate,
+  // transport
   loopStart, setLoopStart,
   loopEnd, setLoopEnd,
   gate, setGate,
   reverse, setReverse,
   bpm, setBpm,
 }) {
-  if (!buffer) return null;
-  const dur = buffer.duration;
+  const duration = buffer?.duration ?? 0;
+  const loopMax = useMemo(() => (duration > 0 ? duration : 0), [duration]);
 
-  const clampStart = (v) => setLoopStart(Math.min(+v, loopEnd - 0.01));
-  const clampEnd   = (v) => setLoopEnd(Math.max(+v, loopStart + 0.01));
+  const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+  const fmtSecs = (s) => (isFinite(s) ? `${s.toFixed(2)}s` : "—");
+
+  const handleStart = (v) => {
+    const t = clamp(parseFloat(v), 0, loopMax);
+    setLoopStart(Math.min(t, Math.max(0, loopEnd - 0.01)));
+  };
+  const handleEnd = (v) => {
+    const t = clamp(parseFloat(v), 0, loopMax);
+    setLoopEnd(Math.max(t, Math.min(loopMax, loopStart + 0.01)));
+  };
+  const handleGate = (v) => setGate(clamp(parseFloat(v), 0.05, 1.0));
+  const handleBpm  = (v) => setBpm(clamp(parseInt(v, 10), 40, 220));
 
   return (
-    <div className="sample-controls">
-      <div className="row">
-        <label>Volume</label>
-        <input type="range" min="0" max="1" step="0.01"
-               value={volume} onChange={(e)=>setVolume(+e.target.value)} />
-        <span className="value">{volume.toFixed(2)}</span>
+    <div className="sample panel">
+      <h3>Sample Controls</h3>
+
+      {/* Knobs */}
+      <div className="knob-row">
+        <Knob label="Volume" value={volume} min={0} max={1} step={0.01}
+              defaultValue={0.9} onChange={onVolume} format={(x)=>x.toFixed(2)} />
+        <Knob label="Pan" value={pan} min={-1} max={1} step={0.01}
+              defaultValue={0} onChange={onPan}
+              format={(x)=> (x >= 0 ? `R ${x.toFixed(2)}` : `L ${(-x).toFixed(2)}`)} />
+        {/* <Knob label="Pitch" sublabel="(st)" value={pitchSt} min={-12} max={12} step={1}
+              defaultValue={0} onChange={onPitchSt}
+              format={(x)=> (x >= 0 ? `+${x} st` : `${x} st`)} /> */}
+        <Knob label="Rate" value={rate} min={0.25} max={2} step={0.01}
+              defaultValue={1} onChange={onRate} format={(x)=>`${x.toFixed(2)}×`} />
       </div>
 
-      <div className="row">
-        <label>Pan</label>
-        <input type="range" min="-1" max="1" step="0.01"
-               value={pan} onChange={(e)=>setPan(+e.target.value)} />
-        <span className="value">{pan.toFixed(2)}</span>
-      </div>
+      {/* Sliders */}
+      <div className="transport">
+        <div className="slider-row reverse-row">
+          <label className="slider-label">Reverse</label>
+          <div className="reverse-wrap">
+            <input
+              type="checkbox"
+              checked={!!reverse}
+              onChange={(e) => setReverse(e.target.checked)}
+            />
+            <span className="rev-state">{reverse ? "On" : "Off"}</span>
+          </div>
+          <div className="slider-value" />
+        </div>
 
-      <div className="row">
-        <label>Pitch (st)</label>
-        <input type="range" min="-12" max="12" step="1"
-               value={semitones} onChange={(e)=>setSemitones(+e.target.value)} />
-        <span className="value">
-          {semitones >= 0 ? `+${semitones}` : semitones} st · {rate.toFixed(2)}×
-        </span>
-      </div>
+        <div className="slider-row">
+          <label className="slider-label">Loop Start</label>
+          <input
+            className="range"
+            type="range"
+            min={0}
+            max={loopMax || 0}
+            step={0.01}
+            value={clamp(loopStart, 0, loopMax || 0)}
+            onChange={(e) => handleStart(e.target.value)}
+            disabled={!duration}
+          />
+          <div className="slider-value">{fmtSecs(loopStart)}</div>
+        </div>
 
-      <div className="row">
-        <label>Reverse</label>
-        <input
-          type="checkbox"
-          checked={reverse}
-          onChange={(e)=>setReverse(e.target.checked)}
-        />
-        <span className="value">{reverse ? "On" : "Off"}</span>
-      </div>
+        <div className="slider-row">
+          <label className="slider-label">Loop End</label>
+          <input
+            className="range"
+            type="range"
+            min={0}
+            max={loopMax || 0}
+            step={0.01}
+            value={clamp(loopEnd, 0, loopMax || 0)}
+            onChange={(e) => handleEnd(e.target.value)}
+            disabled={!duration}
+          />
+          <div className="slider-value">{fmtSecs(loopEnd)}</div>
+        </div>
 
-      <hr />
+        <div className="slider-row">
+          <label className="slider-label">Gate</label>
+          <input
+            className="range"
+            type="range"
+            min={0.05}
+            max={1.0}
+            step={0.01}
+            value={clamp(gate, 0.05, 1.0)}
+            onChange={(e) => handleGate(e.target.value)}
+          />
+          <div className="slider-value">{fmtSecs(gate)}</div>
+        </div>
 
-      <div className="row">
-        <label>Loop Start</label>
-        <input type="range" min="0" max={dur} step="0.01"
-               value={loopStart} onChange={(e)=>clampStart(e.target.value)} />
-        <span className="value">{loopStart.toFixed(2)}s</span>
-      </div>
-
-      <div className="row">
-        <label>Loop End</label>
-        <input type="range" min="0" max={dur} step="0.01"
-               value={loopEnd} onChange={(e)=>clampEnd(e.target.value)} />
-        <span className="value">{loopEnd.toFixed(2)}s</span>
-      </div>
-
-      <div className="row">
-        <label>Gate</label>
-        <input type="range" min="0.05" max={Math.min(1, dur)} step="0.01"
-               value={gate} onChange={(e)=>setGate(+e.target.value)} />
-        <span className="value">{gate.toFixed(2)}s</span>
-      </div>
-
-      <hr />
-
-      <div className="row">
-        <label>BPM</label>
-        <input type="range" min="60" max="180" step="1"
-               value={bpm} onChange={(e)=>setBpm(+e.target.value)} />
-        <span className="value">{bpm}</span>
+        <div className="slider-row">
+          <label className="slider-label">BPM</label>
+          <input
+            className="range"
+            type="range"
+            min={40}
+            max={220}
+            step={1}
+            value={clamp(bpm, 40, 220)}
+            onChange={(e) => handleBpm(e.target.value)}
+          />
+          <div className="slider-value">{bpm}</div>
+        </div>
       </div>
     </div>
   );
