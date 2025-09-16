@@ -157,7 +157,7 @@ export default function StepSequencer({
         <h3>Step Sequencer</h3>
         <div className="seq-controls">
           <label>BPM</label>
-          <input type="range" min="60" max="180" value={bpm} onChange={(e)=>setBpm(+e.target.value)} />
+          <input className="range" type="range" min="60" max="180" value={bpm} onChange={(e)=>setBpm(+e.target.value)} />
           <span className="value">{bpm}</span>
           <button onClick={start} disabled={!buffer || isPlaying}>▶ Play</button>
           <button onClick={stop} disabled={!isPlaying}>■ Stop</button>

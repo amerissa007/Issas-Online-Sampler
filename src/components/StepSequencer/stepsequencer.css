@@ -5,11 +5,40 @@
     padding: 12px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
+.range {
+  width: 100%;
+  height: 4px;
+  background: #5a6c88;
+  border-radius: 999px;
+  outline: none;
+}
+.range::-webkit-slider-runnable-track { height: 4px; background: darkslategrey; border-radius: 999px; }
+.range::-moz-range-track             { height: 4px; background: darkslategrey; border-radius: 999px; }
+.range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: grey;
+  border: 2px solid white;
+  margin-top: -7px;
+  cursor: pointer;
+}
+.range::-moz-range-thumb {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: grey;
+  border: 2px solid white;
+  cursor: pointer;
+}
 
 .seq-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+.seq-header h3 {
+    font-size: 1.9rem;
+    margin: 0;
 }
 
 .seq-controls {
@@ -58,13 +87,15 @@
 .cell {
     height: 34px;
     border-radius: 8px;
-    background: #1a1f2b;
-    border: 1px solid #2c3447;
+    background: #1a1a1a;
+    border: 1px solid black;
+    color: white;
     cursor: pointer;
 }
 
 .cell.on {
-    background: #4f7cff;
+    background: white;
+    color: black;
     box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.1);
 }
 

@@ -10,7 +10,7 @@
 
 .k-arc-bg {
   fill: none;
-  stroke: #3a455a;
+  stroke: darkslategrey;
   stroke-width: 10;
   stroke-linecap: round;
 }
@@ -22,13 +22,13 @@
   filter: drop-shadow(0 2px 2px rgba(0,0,0,0.25));
 }
 .k-disc {
-  fill: #1a2230;
-  stroke: #2b3547;
+  fill: grey;
+  stroke: white;
   stroke-width: 2;
 }
 .k-thumb {
-  fill: #1b2230;
-  stroke: #1b2230;
+  fill: grey;
+  stroke: white;
   stroke-width: 2;
 }
 

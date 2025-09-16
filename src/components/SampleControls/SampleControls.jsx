@@ -1,15 +1,13 @@
 import { useMemo } from "react";
 import Knob from "../ui/Knob";
+import ToggleSwitch from "../ui/ToggleSwitch";
 import "./samplecontrols.css";
 
 export default function SampleControls({
   buffer,
-  // knobs
   volume, onVolume,
   pan, onPan,
-  pitchSt, onPitchSt,
   rate, onRate,
-  // transport
   loopStart, setLoopStart,
   loopEnd, setLoopEnd,
   gate, setGate,
@@ -44,28 +42,19 @@ export default function SampleControls({
         <Knob label="Pan" value={pan} min={-1} max={1} step={0.01}
               defaultValue={0} onChange={onPan}
               format={(x)=> (x >= 0 ? `R ${x.toFixed(2)}` : `L ${(-x).toFixed(2)}`)} />
-        {/* <Knob label="Pitch" sublabel="(st)" value={pitchSt} min={-12} max={12} step={1}
-              defaultValue={0} onChange={onPitchSt}
-              format={(x)=> (x >= 0 ? `+${x} st` : `${x} st`)} /> */}
         <Knob label="Rate" value={rate} min={0.25} max={2} step={0.01}
               defaultValue={1} onChange={onRate} format={(x)=>`${x.toFixed(2)}×`} />
       </div>
 
       {/* Sliders */}
       <div className="transport">
-        <div className="slider-row reverse-row">
           <label className="slider-label">Reverse</label>
-          <div className="reverse-wrap">
-            <input
-              type="checkbox"
-              checked={!!reverse}
-              onChange={(e) => setReverse(e.target.checked)}
+            <ToggleSwitch
+              size="md"
+              checked={reverse}
+              onChange={setReverse}
+              // label={reverse ? "On" : "Off"}
             />
-            <span className="rev-state">{reverse ? "On" : "Off"}</span>
-          </div>
-          <div className="slider-value" />
-        </div>
-
         <div className="slider-row">
           <label className="slider-label">Loop Start</label>
           <input

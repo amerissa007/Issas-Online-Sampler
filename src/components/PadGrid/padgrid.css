@@ -5,8 +5,8 @@
   padding:12px;    
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
  }
-.padgrid-header { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px; }
-.padgrid-header h3 { margin:0; }
+.padgrid-header { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:10px; font-size: 1.9rem; }
+.padgrid-header h3 { font-size: 1.9rem; margin:0; }
 .padgrid .controls { display:flex; align-items:center; gap:10px; }
 .padgrid .controls select { padding:4px 8px; border-radius:6px; border:1px solid #2f3543; background:#0f1220; color:#e9eefc; }
 .padgrid .controls .toggle { display:flex; align-items:center; gap:6px; color:#cfd8e3; }
