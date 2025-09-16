@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/Issas-Online-Sampler/static/css/main.ea40815c.css",
+    "main.js": "/Issas-Online-Sampler/static/js/main.a9de1b8f.js",
+    "static/js/453.5b0b0e05.chunk.js": "/Issas-Online-Sampler/static/js/453.5b0b0e05.chunk.js",
+    "index.html": "/Issas-Online-Sampler/index.html",
+    "main.ea40815c.css.map": "/Issas-Online-Sampler/static/css/main.ea40815c.css.map",
+    "main.a9de1b8f.js.map": "/Issas-Online-Sampler/static/js/main.a9de1b8f.js.map",
+    "453.5b0b0e05.chunk.js.map": "/Issas-Online-Sampler/static/js/453.5b0b0e05.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ea40815c.css",
+    "static/js/main.a9de1b8f.js"
+  ]
+}
