@@ -265,6 +265,18 @@ export default function App() {
               });
             }}
           />
+          <TransportControls
+            audioCtx={ctx}
+            buffer={buffer}
+            reversedBuffer={reversedBuffer}
+            reverse={reverse}
+            loopStart={loopStart}
+            loopEnd={loopEnd}
+            gainNode={inputGainRef.current}
+            panNode={panRef.current}
+            rate={rate}
+            onPlayhead={setPlayhead}
+          />
 
           <SampleControls
             buffer={buffer}
@@ -298,18 +310,7 @@ export default function App() {
             lpfCutoff={lpfCutoff}   setLpfCutoff={setLpfCutoff}
           />
 
-          <TransportControls
-            audioCtx={ctx}
-            buffer={buffer}
-            reversedBuffer={reversedBuffer}
-            reverse={reverse}
-            loopStart={loopStart}
-            loopEnd={loopEnd}
-            gainNode={inputGainRef.current}
-            panNode={panRef.current}
-            rate={rate}
-            onPlayhead={setPlayhead}
-          />
+
         </div>
 
         <div className="right-panel">

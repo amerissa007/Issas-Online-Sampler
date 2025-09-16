@@ -2,10 +2,10 @@
 ; border-radius:12px; padding:12px; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
  }
 .slice-controls h3 { margin:0 0 8px 0; }
-.slice-controls .row { display:flex; align-items:center; flex-wrap:wrap; gap:8px; margin:8px 0; }
+.slice-controls .row { display:flex; align-items:center; flex-wrap:wrap; gap:8px; margin:8px 0; font-size: 0.9rem; }
 .slice-controls .row.small { margin-top:4px; }
 .slice-controls button { padding:.35rem .6rem; border:0; border-radius:8px; background:#3a4bff; color:#fff; cursor:pointer; }
-.slice-controls .hint { color:#9aa3b7; }
+.slice-controls .hint { color:#9aa3b7;font-size: 0.9rem; }
 .slice-controls .rows { margin-top:8px; max-height:120px; overflow:auto; border-top:1px solid #2f3543; padding-top:8px; }
 .slice-controls .idx { width:36px; color:#cfd8e3; }
 .slice-controls .time { color:#9ec9ff; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }

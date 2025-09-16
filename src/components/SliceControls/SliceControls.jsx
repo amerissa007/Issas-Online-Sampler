@@ -33,7 +33,7 @@ export default function SliceControls({
       </div>
       <div className="row small">
         <span className="hint">
-          Add: Alt/⌥-click waveform. Remove: Ctrl/⌘-click marker. Pads use slice segments inside the current loop.
+          Add: (Alt/⌥-+ left-click) waveform. Remove: (Ctrl/⌘-+ left-click) marker. Pads use slice segments inside the current loop.
         </span>
       </div>
       <div className="rows">

@@ -191,7 +191,7 @@ export default function StepSequencer({
       </div>
 
       <p className="seq-hint">
-        Click=toggle • <b>Right-click</b>=next slice • <b>Shift+Click</b>=prev slice • <b>Alt/⌥+Click</b>=clear slice.
+        Click=toggle • <b>Shift + Left-Click</b>=Previous Slice • <b>Alt/⌥ + Left-Click</b>=Clear Slice.
       </p>
     </div>
   );
