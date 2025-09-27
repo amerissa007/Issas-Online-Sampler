@@ -1,4 +1,3 @@
-// src/components/WaveformViewer/WaveformViewer.jsx
 import { useEffect, useMemo, useRef, useState } from "react";
 import { buildPeaks } from "../../utils/Peaks";
 import "./waveformviewer.css";
