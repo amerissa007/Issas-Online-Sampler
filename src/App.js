@@ -10,7 +10,6 @@ import DelayControls from "./components/DelayControls/DelayControls";
 import FilterEQControls from "./components/FilterEQControls/FilterEQControls";
 import TransportControls from "./components/TransportControls/TransportControls";
 import StepSequencer from "./components/StepSequencer/StepSequencer";
-// import ExportControls from "./components/ExportControls/ExportControls";
 import PadGrid from "./components/PadGrid/PadGrid";
 import SliceControls from "./components/SliceControls/SliceControls";
 import ReverbControls from "./components/ReverbControls/ReverbControls";
@@ -163,12 +162,10 @@ export default function App() {
   useEffect(() => { if (ctx && midRef.current) midRef.current.Q.setValueAtTime(midQ, ctx.currentTime); }, [midQ, ctx]);
   useEffect(() => { if (ctx && lpfRef.current) lpfRef.current.frequency.setValueAtTime(lpfCutoff, ctx.currentTime); }, [lpfCutoff, ctx]);
 
-  // Reverb param updates
   useEffect(() => { if (ctx && preDelayRef.current) preDelayRef.current.delayTime.setValueAtTime(reverbPreDelay, ctx.currentTime); }, [reverbPreDelay, ctx]);
   useEffect(() => { if (ctx && revWetRef.current) revWetRef.current.gain.setValueAtTime(reverbMix, ctx.currentTime); }, [reverbMix, ctx]);
   useEffect(() => { if (ctx && revLPFRef.current) revLPFRef.current.frequency.setValueAtTime(reverbHighCut, ctx.currentTime); }, [reverbHighCut, ctx]);
 
-  // Load a single default IR once
   useEffect(() => {
     if (!ctx || !convolverRef.current) return;
 
@@ -199,7 +196,6 @@ export default function App() {
     })();
   }, [ctx]);
 
-  // helpers
   const makeReversedBuffer = (ac, buf) => {
     if (!ac || !buf) return null;
     const rev = ac.createBuffer(buf.numberOfChannels, buf.length, buf.sampleRate);
@@ -354,21 +350,6 @@ export default function App() {
             setLoopStart={setLoopStart}
             setLoopEnd={setLoopEnd}
           />
-
-          {/* <ExportControls
-            audioCtx={ctx}
-            buffer={buffer}
-            reversedBuffer={reversedBuffer}
-            reverse={reverse}
-            loopStart={loopStart}
-            loopEnd={loopEnd}
-            rate={rate}
-            volume={gain}
-            pan={pan}
-            bpm={bpm}
-            steps={steps}
-            gate={gate}
-          /> */}
         </div>
       </div>
     </div>
