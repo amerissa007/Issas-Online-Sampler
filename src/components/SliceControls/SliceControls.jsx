@@ -1,4 +1,3 @@
-// src/components/SliceControls/slicecontrols.jsx
 import "./slicecontrols.css";
 
 export default function SliceControls({
@@ -11,7 +10,7 @@ export default function SliceControls({
   if (!buffer) return null;
 
   const clearAll = () => setSlicePoints([]);
-  const fitLoopAsOne = () => setSlicePoints([loopStart]); // single slice start; PadGrid will end at loopEnd
+  const fitLoopAsOne = () => setSlicePoints([loopStart]);
   const autoEven = (n) => {
     const arr = [];
     const len = Math.max(0, loopEnd - loopStart);
